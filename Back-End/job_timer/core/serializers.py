@@ -16,8 +16,8 @@ class TurnoSerializer(serializers.ModelSerializer):
         
         
 class UsuarioSerializer(serializers.ModelSerializer):
-    departamento = DepartamentoSerializer()
-    turno = TurnoSerializer()
+    departamento = serializers.PrimaryKeyRelatedField(queryset=Departamento.objects.all())
+    turno = serializers.PrimaryKeyRelatedField(queryset=Turno.objects.all())
     
     class Meta:
         model = Usuario

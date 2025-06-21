@@ -4,6 +4,7 @@ from .serializers import UsuarioSerializer, DepartamentoSerializer, TurnoSeriali
 from rest_framework import viewsets
 from django.contrib.auth import get_user_model
 from rest_framework.response import Response
+from rest_framework import status
 
 
 User = get_user_model()
@@ -11,19 +12,128 @@ User = get_user_model()
 # Create your views here.
 
 class DepartamentoViewSet(viewsets.ModelViewSet):
-    queryset = Departamento.objects.all()
-    serializer_class = DepartamentoSerializer
     
+    def list(self, request):
+        queryset = Departamento.objects.all()
+        serializer = DepartamentoSerializer(queryset, many=True)
+        return Response(serializer.data)
+    
+    def retrieve(self, request, pk=None):
+        try:
+            departamento = Departamento.objects.get(pk = pk)
+            serializer = DepartamentoSerializer(departamento)
+            return Response(serializer.data)
+        except Departamento.DoesNotExist:
+            return Response({"error": "Departamento no encontrado"}, status==404)
+    
+    
+    def create(self, request):
+        serializer = DepartamentoSerializer(data=request.data)
+        if(serializer.is_valid()):
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    def update(self, request, pk=None):
+        try:
+            departamento = Departamento.objects.get(pk=pk)
+        except Departamento.DoesNotExist:
+            return Response({"error": "Departamento no encontrado"}, status=404)
+    
+        serializer = DepartamentoSerializer(departamento, data=request.data)
+        if(serializer.is_valid()):
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    def destroy(self, request, pk=None):
+        try:
+            departamento = Departamento.objects.get(pk=pk)
+            departamento.delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        except Departamento.DoesNotExist:
+            return Response({"error": "Departamento no encontrado"}, status=404)
     
 class TurnoViewSet(viewsets.ModelViewSet):
-    queryset = Turno.objects.all()
-    serializer_class = TurnoSerializer
+    
+    def list(self, request):   
+        queryset = Turno.objects.all()
+        serializer = TurnoSerializer(queryset, many=True)
+        return Response(serializer.data)
+    
+    def retrieve(self, request, pk=None):
+        try:
+            turno = Turno.objects.get(pk=pk)
+            serializer = TurnoSerializer(turno)
+            return Response(serializer.data)
+        except Turno.DoesNotExist:
+            return Response({"error": "Turno no encontrado"}, status=404)
+        
+        
+    def create(self, request):
+        serializer = TurnoSerializer(data=request.data)
+        if(serializer.is_valid()):
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    def update(self, request, pk=None):
+        try:
+            turno = Turno.objects.get(pk=pk)
+        except Turno.DoesNotExist:
+            return Response({"error": "Turno no encontrado"}, status=404)
+        
+        serializer = TurnoSerializer(turno, data=request.data)
+        if(serializer.is_valid()):
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    
+    def destroy(self, request, pk=None):
+        try:
+            turno = TurnoSerializer.objects.get(pk=pk)
+            turno.delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        except Turno.DoesNotExist:
+            return Response({"error": "Turno no encontrado"}, status=404)
     
 
 class FichajeViewSet(viewsets.ModelViewSet):
-    queryset = Fichaje.objects.all()
-    serializer_class = FichajeSerializer
+    def list(self, request):
+        queryset = Fichaje.objects.all()
+        serializer = FichajeSerializer(queryset, many=True)
+        return Response(serializer.data)
     
+    
+    def retrieve(self, request, pk=None):
+        try:
+            fichaje = Fichaje.objects.get(pk=pk)
+            serializer = FichajeSerializer(fichaje)
+            return Response(serializer.data)
+        except Fichaje.DoesNotExist:
+            return Response({"error": "Fichaje no encontrado"}, status=404)
+        
+        
+    def create(self, request):
+        serializer = FichajeSerializer(data=request.data)
+        if(serializer.is_valid()):
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    
+    def update(self, request, pk=None):
+        try:
+            fichaje = Fichaje.objects.get(pk=pk)
+            serializer = FichajeSerializer(fichaje, request.data)
+            if(serializer.is_valid()):
+                serializer.save()
+                return Response(serializer.data)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        except Fichaje.DoesNotExist:
+            return Response({"error": "Fichaje no encontrado"}, status=404)
+        
 
 class UsuarioViewSet(viewsets.ViewSet):
 
@@ -39,3 +149,34 @@ class UsuarioViewSet(viewsets.ViewSet):
             return Response(serializer.data)
         except User.DoesNotExist:
             return Response({"error": "Usuario no encontrado"}, status=404)
+        
+        
+    def create(self, request):
+        serializer = UsuarioSerializer(data=request.data)
+        if ( serializer.is_valid()):
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        
+        
+    def update(self, request, pk=None):
+        try:
+            user = User.objects.get(pk=pk)
+        except User.DoesNotExist:
+            return Response({"error": "Usuario no encontrado"}, status=404)
+        
+        serializer = UsuarioSerializer(user, data=request.data)
+        if(serializer.is_valid()):
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        
+    
+    def destroy(self, request, pk=None):
+        try:
+            user = User.objects.get(pk = pk)
+            user.delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        except User.DoesNotExist:
+            return Response({"error": "Usuario no encontrado"}, status=404)
+        

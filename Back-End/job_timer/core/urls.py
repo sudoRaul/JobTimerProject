@@ -4,9 +4,9 @@ from .views import UsuarioViewSet, DepartamentoViewSet, TurnoViewSet, FichajeVie
 
 router = DefaultRouter()
 
-router.register(r'departamentos', DepartamentoViewSet)
-router.register(r'turnos', TurnoViewSet)
-router.register(r'fichajes', FichajeViewSet)
+router.register(r'departamentos', DepartamentoViewSet, basename='departamento')
+router.register(r'turnos', TurnoViewSet, basename='turno')
+router.register(r'fichajes', FichajeViewSet, basename='fichaje')
 router.register(r'usuarios', UsuarioViewSet, basename='usuario')
 
 urlpatterns = [
