@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.utils import timezone
 
 # Create your models here.
 
@@ -20,6 +21,7 @@ class Usuario(AbstractUser):
 
 class Departamento(models.Model):
     nombre = models.CharField(max_length=100)
+    descripcion = models.CharField(max_length=255, default="Departamento creado sin descripción")
     
     def __str__(self):
         return self.nombre
@@ -37,10 +39,24 @@ class Turno(models.Model):
     
     
 class Fichaje(models.Model):
+    
+    CHOICES = [
+        ('entrada', 'Entrada'),
+        ('salida', 'Salida')
+    ]
+    
     usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
-    fecha = models.DateField(auto_now_add=True)
-    hora_entrada = models.DateTimeField(null=True, blank=True)
-    hora_salida = models.DateTimeField(null=True, blank=True)
+    tipo = models.CharField(max_length=10, choices=CHOICES)
+    fecha = models.DateField(editable=False)
+    hora = models.TimeField(editable=False)
+    
+    
+    def save(self, *args, **kwargs):
+        now = timezone.now()
+        self.fecha = now.date()
+        self.hora = now.time()
+        super().save(*args, **kwargs)
+    
     
     def __str__(self):
         return f"Fichaje de {self.usuario.username} el {self.fecha}"

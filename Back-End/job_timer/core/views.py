@@ -24,7 +24,7 @@ class DepartamentoViewSet(viewsets.ModelViewSet):
             serializer = DepartamentoSerializer(departamento)
             return Response(serializer.data)
         except Departamento.DoesNotExist:
-            return Response({"error": "Departamento no encontrado"}, status==404)
+            return Response({"error": "Departamento no encontrado"}, status=404)
     
     
     def create(self, request):
@@ -92,7 +92,7 @@ class TurnoViewSet(viewsets.ModelViewSet):
     
     def destroy(self, request, pk=None):
         try:
-            turno = TurnoSerializer.objects.get(pk=pk)
+            turno = Turno.objects.get(pk=pk)
             turno.delete()
             return Response(status=status.HTTP_204_NO_CONTENT)
         except Turno.DoesNotExist:
@@ -123,16 +123,17 @@ class FichajeViewSet(viewsets.ModelViewSet):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
     
-    def update(self, request, pk=None):
-        try:
-            fichaje = Fichaje.objects.get(pk=pk)
-            serializer = FichajeSerializer(fichaje, request.data)
-            if(serializer.is_valid()):
-                serializer.save()
-                return Response(serializer.data)
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        except Fichaje.DoesNotExist:
-            return Response({"error": "Fichaje no encontrado"}, status=404)
+    # It is unnecessary update it
+    #def update(self, request, pk=None):
+    #    try:
+    #        fichaje = Fichaje.objects.get(pk=pk)
+    #        serializer = FichajeSerializer(fichaje, request.data)
+    #        if(serializer.is_valid()):
+    #            serializer.save()
+    #            return Response(serializer.data)
+    #        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    #    except Fichaje.DoesNotExist:
+    #        return Response({"error": "Fichaje no encontrado"}, status=404)
         
 
 class UsuarioViewSet(viewsets.ViewSet):
