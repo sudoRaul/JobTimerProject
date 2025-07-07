@@ -50,6 +50,8 @@ class UsuarioResumeSerializer(serializers.ModelSerializer):
         fields = ['id', 'first_name', 'last_name', 'email']
         
         
+        
+        
 
 class FichajeSerializer(serializers.ModelSerializer):
     usuario = UsuarioResumeSerializer(read_only=True)

@@ -1,10 +1,12 @@
 from django.shortcuts import render
 from .models import Usuario, Departamento, Turno, Fichaje
-from .serializers import UsuarioSerializer, DepartamentoSerializer, TurnoSerializer, FichajeSerializer
+from .serializers import UsuarioSerializer, DepartamentoSerializer, TurnoSerializer, FichajeSerializer, UsuarioResumeSerializer
 from rest_framework import viewsets
 from django.contrib.auth import get_user_model
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.decorators import action
+
 
 
 User = get_user_model()
@@ -12,6 +14,8 @@ User = get_user_model()
 # Create your views here.
 
 class DepartamentoViewSet(viewsets.ModelViewSet):
+    queryset = Departamento.objects.all()
+    serializer_class = DepartamentoSerializer
     
     def list(self, request):
         queryset = Departamento.objects.all()
@@ -53,8 +57,18 @@ class DepartamentoViewSet(viewsets.ModelViewSet):
             return Response(status=status.HTTP_204_NO_CONTENT)
         except Departamento.DoesNotExist:
             return Response({"error": "Departamento no encontrado"}, status=404)
+        
+    
+    @action(detail=True, methods=['get'], url_path='usuarios')
+    def listar_usuarios(self, request, pk=None):
+        departamento = self.get_object()
+        usuarios = Usuario.objects.filter(departamento = departamento)
+        serializer = UsuarioResumeSerializer(usuarios, many=True)
+        return Response(serializer.data)
     
 class TurnoViewSet(viewsets.ModelViewSet):
+    queryset = Turno.objects.all()
+    serializer_class = TurnoSerializer
     
     def list(self, request):   
         queryset = Turno.objects.all()
@@ -97,6 +111,13 @@ class TurnoViewSet(viewsets.ModelViewSet):
             return Response(status=status.HTTP_204_NO_CONTENT)
         except Turno.DoesNotExist:
             return Response({"error": "Turno no encontrado"}, status=404)
+        
+    @action(detail=True, methods=['get'], url_path='usuarios')
+    def listar_usuarios(self, request, pk = None):
+        turno = self.get_object()
+        usuarios = Usuario.objects.filter(turno = turno)
+        serializer = UsuarioResumeSerializer(usuarios, many=True)
+        return Response(serializer.data)
     
 
 class FichajeViewSet(viewsets.ModelViewSet):
