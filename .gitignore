@@ -1,2 +1,47 @@
 Back-End/job_timer/job_timer/settings.py
+Back-End/job_timer/venv/
+
+
+# Compiled output
+Front-End/job-timer/dist
+Front-End/job-timer/tmp
+Front-End/job-timer/out-tsc
+Front-End/job-timer/bazel-out
+
+# Node
+Front-End/job-timer/node_modules
+Front-End/job-timer/npm-debug.log
+Front-End/job-timer/yarn-error.log
+
+# IDEs and editors
+Front-End/job-timer/idea/
+Front-End/job-timer/project
+Front-End/job-timer/classpath
+Front-End/job-timer/c9/
+Front-End/job-timer/launch
+Front-End/job-timer/settings/
+Front-End/job-timer/sublime-workspace
+
+# Visual Studio Code
+Front-End/job-timer/vscode/*
+Front-End/job-timer/vscode/settings.json
+Front-End/job-timer/vscode/tasks.json
+Front-End/job-timer/vscode/launch.json
+Front-End/job-timer/vscode/extensions.json
+Front-End/job-timer/history/*
+
+# Miscellaneous
+Front-End/job-timer/angular/cache
+Front-End/job-timer/sass-cache/
+Front-End/job-timer/connect.lock
+Front-End/job-timer/coverage
+Front-End/job-timer/libpeerconnection.log
+Front-End/job-timer/testem.log
+Front-End/job-timer/typings
+
+# System files
+Front-End/job-timer/DS_Store
+Front-End/job-timer/Thumbs.db
+
+Front-End/.gitignore
 .gitignore

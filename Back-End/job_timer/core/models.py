@@ -4,6 +4,7 @@ from django.utils import timezone
 
 # Create your models here.
 
+# Al heredar de AbstractUser se incluyen campos como first_name, last_name, email, password
 class Usuario(AbstractUser):
     ADMIN= 'admin'
     EMPLEADO = 'empleado'

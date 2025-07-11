@@ -39,10 +39,20 @@ class UsuarioSerializer(serializers.ModelSerializer):
         queryset = Turno.objects.all(), write_only = True, source = 'turno'
     )
     
+    password = serializers.CharField(write_only=True, required=True)
+    
     class Meta:
         model = Usuario
-        fields = ['id', 'username', 'first_name', 'last_name', 'email', 'rol', 'departamento', 'turno', 'departamento_id', 'turno_id']
+        fields = ['id', 'username', 'first_name', 'last_name',
+                  'email', 'password', 'rol', 'departamento',
+                  'turno', 'departamento_id', 'turno_id']
         
+    def create(self, validated_data):
+        password = validated_data.pop('password')
+        user = Usuario(**validated_data)
+        user.set_password(password)
+        user.save()
+        return user
         
 class UsuarioResumeSerializer(serializers.ModelSerializer):
     class Meta:
